@@ -40,7 +40,7 @@ public class SearchControllerImpl implements SearchController {
 
 		logger.info("request.getName()" + request.getName());
 		if (request.getName() == null || request.getName().isEmpty()) {
-			responseJson.setMessage(env.getProperty("INPUT_NAME_ERROR"));
+			responseJson.setMessage(messageService.getMessage("INPUT_NAME_ERROR"));
 			responseJson.setStatus(HttpStatus.BAD_REQUEST);
 			responseJson.setData(null);
 			return new ResponseEntity<>(responseJson, HttpStatus.BAD_REQUEST);
@@ -48,7 +48,7 @@ public class SearchControllerImpl implements SearchController {
 
 		if (request.getName() != null || !(request.getName().isEmpty())) {
 			if (request.getDob() == null || (request.getDob().isEmpty())) {
-				responseJson.setMessage(env.getProperty("INPUT_DOB_ERROR"));
+				responseJson.setMessage(messageService.getMessage("INPUT_DOB_ERROR"));
 				responseJson.setStatus(HttpStatus.BAD_REQUEST);
 				responseJson.setData(null);
 				return new ResponseEntity<>(responseJson, HttpStatus.BAD_REQUEST);
@@ -74,7 +74,7 @@ public class SearchControllerImpl implements SearchController {
 
 			ResponseJson<HttpStatus, Map<String, String>> responseJson = new ResponseJson<>();
 
-			responseJson.setMessage(env.getProperty("message.unsuccessful"));
+			responseJson.setMessage(messageService.getMessage("message.unsuccessful"));
 			Map<String, String> data = new HashMap<>();
 			data.put("message", ce.getMessage());
 			responseJson.setData(data);
@@ -88,10 +88,10 @@ public class SearchControllerImpl implements SearchController {
 
 			ResponseJson<HttpStatus, Map<String, String>> responseJson = new ResponseJson<>();
 
-			responseJson.setMessage(env.getProperty("message.unsuccessful"));
+			responseJson.setMessage(messageService.getMessage("message.unsuccessful"));
 					//messageService.getMessage("message.unsuccessful"));
 			Map<String, String> data = new HashMap<>();
-			data.put("message", env.getProperty("message.unsuccessful"));
+			data.put("message", messageService.getMessage("message.unsuccessful"));
 			responseJson.setData(data);
 			responseJson.setStatus(HttpStatus.PRECONDITION_FAILED);
 

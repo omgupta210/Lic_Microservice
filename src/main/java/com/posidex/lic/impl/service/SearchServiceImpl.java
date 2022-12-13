@@ -130,7 +130,7 @@ public class SearchServiceImpl implements SearchService {
 		System.out.println("name" + request.getName());
 		dg.setPolicyHolderName(request.getName());
 		dg.setDateOfBirth(request.getDob());
-		logger.info(request.getPhoneNumber() + "ZXc");
+		//logger.info(request.getPhoneNumber() + "ZXc");
 		if (!(request.getPhoneNumber() == null)) {
 			if (!(request.getPhoneNumber().isEmpty())) {
 				dg.setPhone1(request.getPhoneNumber());
@@ -204,20 +204,19 @@ public class SearchServiceImpl implements SearchService {
 
 		String resJsonString = gson.toJson(responseEntity);
 		logger.info("Getting response body as json  from matching service: " + resJsonString);
-		// logger.info("Message from
-		// service"+messageService.getMessage("REQUEST.ERROR"));
-		if (responseEntity.getStatusMessage().equals("1055")) {
+		 //logger.info("Message from service--"+messageService.getMessage("REQUEST.ERROR"));
+		if (responseEntity.getStatusMessage().equals("1055")||(responseEntity.getStatusMessage().equals("105"))) {
 			logger.info("Message Code from matching service:" + responseEntity.getStatusMessage());
-			throw new CustomException(env.getProperty("message.validation"));
+			throw new CustomException(messageService.getMessage("message.validation"));
 		} else if (responseEntity.getStatusMessage().equals("1030")) {
 			logger.info("Message Code from matching service:" + responseEntity.getStatusMessage());
-			throw new CustomException(env.getProperty("REQUEST_ERROR"));
+			throw new CustomException(messageService.getMessage("REQUEST_ERROR"));
 		} else if (responseEntity.getStatusMessage().equals("1010") || responseEntity.getStatusMessage().equals("1015")
 				|| responseEntity.getStatusMessage().equals("1021") || responseEntity.getStatusMessage().equals("1035")
 				|| responseEntity.getStatusMessage().equals("1045")
 				|| responseEntity.getStatusMessage().equals("1050")) {
 			logger.info("Message Code from matching service:" + responseEntity.getStatusMessage());
-			throw new CustomException(env.getProperty("message.error"));
+			throw new CustomException(messageService.getMessage("message.error"));
 		}
 
 		// String resJson = gson.toJson(resJsonString);
@@ -232,6 +231,10 @@ public class SearchServiceImpl implements SearchService {
 		}
 		apiHeaders.add("CustomerId");
 		logger.info("matchCount" + responseEntity.getRetValue().getMatchCount());
+		if(responseEntity.getRetValue().getMatchCount() ==0) {
+			logger.info("Message Code from matching service:" + responseEntity.getStatusMessage());
+			throw new CustomException(messageService.getMessage("message.Invalid"));
+		}
 		for (int i = 1; i < responseEntity.getApiResults().size(); i++) {
 			ArrayList<String> apiResultList = new ArrayList<>();
 			StringBuffer sb = new StringBuffer();
